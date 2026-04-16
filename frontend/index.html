@@ -3,59 +3,216 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Air Quality Prediction</title>
+    <title>Air Quality AI</title>
     <link rel="stylesheet" href="styles.css" />
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
     <div class="container">
-        <h1>Air Quality Prediction & Health Recommendation</h1>
+        <!-- Navigation -->
+        <nav class="navbar">
+            <div class="nav-brand">
+                <div class="logo-icon">🌍</div>
+                <h1>Air Quality AI</h1>
+            </div>
+            <div class="nav-tabs">
+                <button type="button" class="nav-tab active" data-screen="predict">
+                    <span class="icon">🔍</span>
+                    <span>Predict</span>
+                </button>
+                <button type="button" class="nav-tab" data-screen="results">
+                    <span class="icon">📊</span>
+                    <span>Results</span>
+                </button>
+                <button type="button" class="nav-tab" data-screen="analytics">
+                    <span class="icon">📈</span>
+                    <span>Analytics</span>
+                </button>
+            </div>
+        </nav>
 
-        <div class="card">
-            <h2>Input Air Pollutants</h2>
-            <form id="aqiForm">
-                <div class="form-row">
-                    <label for="pm25">PM2.5</label>
-                    <input type="number" id="pm25" name="pm25" step="0.1" required />
-                </div>
-                <div class="form-row">
-                    <label for="pm10">PM10</label>
-                    <input type="number" id="pm10" name="pm10" step="0.1" required />
-                </div>
-                <div class="form-row">
-                    <label for="no2">NO2</label>
-                    <input type="number" id="no2" name="no2" step="0.1" required />
-                </div>
-                <div class="form-row">
-                    <label for="so2">SO2</label>
-                    <input type="number" id="so2" name="so2" step="0.1" required />
-                </div>
-                <div class="form-row">
-                    <label for="co">CO</label>
-                    <input type="number" id="co" name="co" step="0.01" required />
+        <!-- Screen 1: Predict -->
+        <div class="screen active" id="predict-screen">
+            <div class="screen-header">
+                <h2>Air Quality Prediction</h2>
+                <p>Enter pollutant measurements to predict AQI and receive personalized health recommendations</p>
+            </div>
+
+            <div class="grid grid-2">
+                <div class="card premium-card">
+                    <div class="card-header">
+                        <h3>📝 Input Pollutants</h3>
+                        <span class="status-badge">Active</span>
+                    </div>
+                    <form id="aqiForm" class="form-grid-2">
+                        <div class="input-group">
+                            <label for="pm25">PM2.5 (μg/m³)</label>
+                            <div class="input-wrapper">
+                                <input type="number" id="pm25" name="pm25" step="0.1" placeholder="45" required />
+                                <span class="unit">μg/m³</span>
+                            </div>
+                        </div>
+                        <div class="input-group">
+                            <label for="pm10">PM10 (μg/m³)</label>
+                            <div class="input-wrapper">
+                                <input type="number" id="pm10" name="pm10" step="0.1" placeholder="80" required />
+                                <span class="unit">μg/m³</span>
+                            </div>
+                        </div>
+                        <div class="input-group">
+                            <label for="no2">NO₂ (ppb)</label>
+                            <div class="input-wrapper">
+                                <input type="number" id="no2" name="no2" step="0.1" placeholder="30" required />
+                                <span class="unit">ppb</span>
+                            </div>
+                        </div>
+                        <div class="input-group">
+                            <label for="so2">SO₂ (ppb)</label>
+                            <div class="input-wrapper">
+                                <input type="number" id="so2" name="so2" step="0.1" placeholder="10" required />
+                                <span class="unit">ppb</span>
+                            </div>
+                        </div>
+                        <div class="input-group">
+                            <label for="co">CO (ppm)</label>
+                            <div class="input-wrapper">
+                                <input type="number" id="co" name="co" step="0.01" placeholder="0.8" required />
+                                <span class="unit">ppm</span>
+                            </div>
+                        </div>
+                        <button type="submit" id="predictBtn" class="btn-primary btn-large">🚀 Predict AQI</button>
+                    </form>
+                    <div id="loader" class="loader" style="display: none;">
+                        <span class="spinner"></span>
+                        <p>Analyzing air quality...</p>
+                    </div>
+                    <div id="error" class="error-box" role="alert" aria-live="polite"></div>
                 </div>
 
-                <button type="submit" id="predictBtn">Predict AQI</button>
-            </form>
-
-            <div id="loader" class="loader" style="display: none;">Loading...</div>
-            <div id="result" class="result"></div>
-            <div id="error" class="error"></div>
+                <div class="card premium-card">
+                    <div class="card-header">
+                        <h3>💡 Quick Tips</h3>
+                    </div>
+                    <div class="tips-container">
+                        <div class="tip-item">
+                            <span class="tip-icon">✓</span>
+                            <div>
+                                <strong>PM2.5</strong>
+                                <p>Fine particles affecting deep lung penetration</p>
+                            </div>
+                        </div>
+                        <div class="tip-item">
+                            <span class="tip-icon">✓</span>
+                            <div>
+                                <strong>PM10</strong>
+                                <p>Coarse particles causing respiratory issues</p>
+                            </div>
+                        </div>
+                        <div class="tip-item">
+                            <span class="tip-icon">✓</span>
+                            <div>
+                                <strong>NO₂ & SO₂</strong>
+                                <p>Gases from traffic and industrial emissions</p>
+                            </div>
+                        </div>
+                        <div class="tip-item">
+                            <span class="tip-icon">✓</span>
+                            <div>
+                                <strong>CO</strong>
+                                <p>Carbon monoxide from vehicle exhaust</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
 
-        <div class="card">
-            <h2>Model Comparison</h2>
-            <div id="modelComparison" class="metrics">Loading model metrics...</div>
+        <!-- Screen 2: Results -->
+        <div class="screen" id="results-screen">
+            <div class="screen-header">
+                <h2>Prediction Results</h2>
+                <p>Your air quality analysis and health recommendations</p>
+            </div>
+
+            <div id="result-content" style="display: none;">
+                <div class="result-hero">
+                    <div id="result" class="result-box"></div>
+                </div>
+
+                <div class="grid grid-2">
+                    <div class="card premium-card">
+                        <div class="card-header">
+                            <h3>📊 AQI Visualization</h3>
+                        </div>
+                        <canvas id="aqiChart"></canvas>
+                    </div>
+                    <div class="card premium-card">
+                        <div class="card-header">
+                            <h3>🏥 Health Status</h3>
+                        </div>
+                        <div id="health-status" class="health-status"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="no-results" class="empty-state">
+                <div class="empty-icon">📭</div>
+                <h3>No Results Yet</h3>
+                <p>Go to the <strong>Predict</strong> tab and enter air quality data to see results here</p>
+            </div>
         </div>
 
-        <div class="card">
-            <h2>AQI Visualization</h2>
-            <canvas id="aqiChart"></canvas>
-        </div>
+        <!-- Screen 3: Analytics -->
+        <div class="screen" id="analytics-screen">
+            <div class="screen-header">
+                <h2>Model Analytics</h2>
+                <p>ML model performance, comparison, and feature importance</p>
+            </div>
 
-        <div class="card">
-            <h2>Feature Importance (Random Forest)</h2>
-            <img id="featureImg" src="http://127.0.0.1:5000/feature_importance.png" alt="Feature Importance Plot" style="max-width:100%; display:none;">
+            <div class="grid grid-1">
+                <div class="card premium-card">
+                    <div class="card-header">
+                        <h3>⚙️ Model Performance</h3>
+                    </div>
+                    <div id="modelComparison" class="metrics-grid">Loading model metrics...</div>
+                </div>
+            </div>
+
+            <div class="grid grid-2">
+                <div class="card premium-card">
+                    <div class="card-header">
+                        <h3>🌳 Random Forest Importance</h3>
+                    </div>
+                    <img id="featureImg" src="http://127.0.0.1:5000/feature_importance.png" alt="Feature Importance" class="feature-image" style="display:none;">
+                    <div id="feature-loader" class="loader" style="display: flex;">
+                        <span class="spinner"></span>
+                        <p>Loading...</p>
+                    </div>
+                </div>
+                <div class="card premium-card">
+                    <div class="card-header">
+                        <h3>📚 About Models</h3>
+                    </div>
+                    <div class="info-box">
+                        <div class="info-item">
+                            <strong>Linear Regression</strong>
+                            <p>Simple baseline model using straight-line fit</p>
+                        </div>
+                        <div class="info-item">
+                            <strong>Random Forest</strong>
+                            <p>Ensemble of 100 decision trees for complex patterns</p>
+                        </div>
+                        <div class="info-item">
+                            <strong>Gradient Boosting</strong>
+                            <p>Sequential tree building for advanced non-linear relationships</p>
+                        </div>
+                        <div class="info-item">
+                            <strong>Logistic Regression</strong>
+                            <p>Direct classification of AQI categories</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
